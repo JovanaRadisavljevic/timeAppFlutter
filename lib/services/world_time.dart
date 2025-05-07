@@ -1,11 +1,13 @@
 import 'package:http/http.dart';
 import 'dart:convert';
+import 'package:intl/intl.dart';
 
 class WorldTime {
   String location;
   String time=''; //time in location
   String flag;//url to an asset flag icon
   String url;//location url for api
+  bool isDayTime=false;
 
   WorldTime({
     required this.location,
@@ -28,7 +30,8 @@ class WorldTime {
       now = now.add(Duration(hours: int.parse(offset)));
 
       //set time property
-      time = now.toString();
+      isDayTime = (now.hour>6 && now.hour<19)? true: false;
+      time = DateFormat.jm().format(now);
     }catch(e){
       print('Greska: $e');
       time='could not get time data';
