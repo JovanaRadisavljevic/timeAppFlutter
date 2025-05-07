@@ -15,7 +15,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     var routeData = ModalRoute.of(context)?.settings.arguments;
     if (routeData != null ) {
-      data = routeData as Map<String, dynamic>;
+      data = data.isNotEmpty? data:  routeData as Map<String, dynamic> ;
     }
     //set background
     String bgImage= data['isDayTime']? 'day.png': 'night.png';
@@ -37,8 +37,16 @@ class _HomeState extends State<Home> {
             child: Column(
               children: <Widget>[
                 FloatingActionButton.extended(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/location');
+                  onPressed: () async {
+                     dynamic result =  await Navigator.pushNamed(context, '/location');
+                     setState(() {
+                       data={
+                         'time': result['time'],
+                         'location': result['location'],
+                         'isDayTime': result['isDayTime'],
+                         'flag': result['flag']
+                       };
+                     });
                   },
                   icon: Icon(
                       Icons.edit_location,
